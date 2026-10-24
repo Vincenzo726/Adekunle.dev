@@ -32,13 +32,36 @@ test('portfolio pages are served with page-to-page navigation', async () => {
     assert.match(html, /href="\/contact\.html"/, `${page} should link to Contact`);
     assert.match(html, /property="og:title"/, `${page} should include a share title`);
     assert.match(html, new RegExp(`<link rel="canonical" href="https://adekunle-dev\\.onrender\\.com${page === '/' ? '/' : page}">`), `${page} should include its canonical URL`);
-    assert.match(html, /property="og:image" content="https:\/\/adekunle-dev\.onrender\.com\/images\//, `${page} should use an absolute social image URL`);
+    assert.match(html, /property="og:image" content="https:\/\/adekunle-dev\.onrender\.com\/images\/profile\.jpg"/, `${page} should use the profile photo as its social image`);
     assert.match(html, /href="\/favicon\.svg"/, `${page} should include the site favicon`);
   }
 
   const favicon = await fetch(`${baseUrl}/favicon.svg`);
   assert.equal(favicon.status, 200);
   assert.match(favicon.headers.get('content-type'), /image\/svg\+xml/);
+
+  const profilePhoto = await fetch(`${baseUrl}/images/profile.jpg`);
+  assert.equal(profilePhoto.status, 200);
+  assert.match(profilePhoto.headers.get('content-type'), /image\/jpeg/);
+});
+
+test('homepage person structured data includes the profile image and work specialties', async () => {
+  const response = await fetch(`${baseUrl}/`);
+  const html = await response.text();
+  const jsonLd = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(jsonLd, 'homepage should include JSON-LD');
+  const data = JSON.parse(jsonLd[1]);
+  const person = data['@graph'].find((item) => item['@type'] === 'Person');
+  assert.equal(person.name, 'ADEKUNLE BOLUWATIFE JOHN');
+  assert.equal(person.image, 'https://adekunle-dev.onrender.com/images/profile.jpg');
+  assert.ok(person.sameAs.includes('https://linkedin.com/in/boluwatife-adekunle-897588318'));
+  assert.ok(person.knowsAbout.includes('Backend development'));
+});
+
+test('About page displays the profile portrait with descriptive alt text', async () => {
+  const response = await fetch(`${baseUrl}/about.html`);
+  const html = await response.text();
+  assert.match(html, /src="\/images\/profile\.jpg" alt="Portrait of ADEKUNLE BOLUWATIFE JOHN"/);
 });
 
 test('robots and sitemap are available and list only canonical portfolio pages', async () => {

@@ -21,7 +21,7 @@ The Google Search Console HTML verification file is served from the site root. D
 
 ## Before publishing
 
-- Add Boluwatife's approved portrait and project screenshots.
+- Confirm the portrait and project screenshots are approved for public use.
 - Confirm the exact project contributions and permission to feature each project.
 - Verify the phone number before adding it to the public contact section.
 - Confirm the exact freeCodeCamp certificate title and link.

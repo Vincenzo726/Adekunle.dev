@@ -31,5 +31,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .journey-focus{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-top:36px;padding:21px 23px;border:1px solid #354036;background:linear-gradient(110deg,#182019,#121613);border-radius:3px}
 .journey-focus>span{color:var(--green);font:9px var(--mono);letter-spacing:.08em}
 .journey-focus p{margin:0;color:#a8b2a6;font-size:11px;line-height:1.8}
+.about-profile{display:flex;flex-direction:column;align-items:flex-start;gap:28px}
+.profile-portrait{position:relative;width:min(100%,250px);margin:0;overflow:hidden;border:1px solid #354036;background:#151a17;box-shadow:0 22px 50px #0004}
+.profile-portrait img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+.profile-portrait figcaption{display:grid;gap:3px;padding:10px 12px;color:var(--text);font:9px var(--mono);letter-spacing:.04em}
+.profile-portrait figcaption span{color:#899489;font-size:8px}
 @media(max-width:500px){.journey-focus{grid-template-columns:1fr;gap:8px}}
 @media(prefers-reduced-motion:reduce){.page-section{animation:none}.project,.project .project-shot,.food-photo img,a,button{transition:none}}
