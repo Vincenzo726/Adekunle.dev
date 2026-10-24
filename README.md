@@ -9,16 +9,15 @@ A responsive portfolio built with HTML, CSS, vanilla JavaScript, and Express.
 3. Run `npm run dev`.
 4. Open `http://localhost:3000`.
 
-## Contact form setup
+## Contact form
 
-The form sends messages through SMTP and does not store them in a database. Until SMTP is configured, submissions receive an honest setup message and visitors can email `boluwatifeadek1@gmail.com` directly.
+The contact form opens WhatsApp with the visitor's name, email, and message prefilled. The visitor must press Send in WhatsApp to deliver it.
 
-1. Copy `.env.example` to `.env`.
-2. Fill in `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and `CONTACT_FROM` using credentials from your email provider.
-3. Set `CONTACT_TO` to the inbox that should receive inquiries.
-4. Restart the server and submit a test message.
+## Search indexing and SEO
 
-Never commit `.env` or publish email provider credentials.
+The public pages include canonical URLs, page-specific search and social metadata, and structured data on the homepage. `public/robots.txt` advertises `public/sitemap.xml` to crawlers. Keep the canonical URLs and sitemap host aligned with the production domain.
+
+The Google Search Console HTML verification file is served from the site root. Deploy it, then click Verify in Search Console. Submit `https://adekunle-dev.onrender.com/sitemap.xml` in the Search Console Sitemaps report. Keep the verification file available after verification.
 
 ## Before publishing
 
@@ -30,4 +29,4 @@ Never commit `.env` or publish email provider credentials.
 
 ## Checks
 
-Run `npm test` to exercise the health and contact API endpoints.
+Run `npm test` to exercise the health and contact API endpoints, page navigation, sitemap, robots rules, and SEO metadata.

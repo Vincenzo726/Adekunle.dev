@@ -31,12 +31,41 @@ test('portfolio pages are served with page-to-page navigation', async () => {
     assert.match(html, /href="\/more\.html"/, `${page} should link to More`);
     assert.match(html, /href="\/contact\.html"/, `${page} should link to Contact`);
     assert.match(html, /property="og:title"/, `${page} should include a share title`);
+    assert.match(html, new RegExp(`<link rel="canonical" href="https://adekunle-dev\\.onrender\\.com${page === '/' ? '/' : page}">`), `${page} should include its canonical URL`);
+    assert.match(html, /property="og:image" content="https:\/\/adekunle-dev\.onrender\.com\/images\//, `${page} should use an absolute social image URL`);
     assert.match(html, /href="\/favicon\.svg"/, `${page} should include the site favicon`);
   }
 
   const favicon = await fetch(`${baseUrl}/favicon.svg`);
   assert.equal(favicon.status, 200);
   assert.match(favicon.headers.get('content-type'), /image\/svg\+xml/);
+});
+
+test('robots and sitemap are available and list only canonical portfolio pages', async () => {
+  const robotsResponse = await fetch(`${baseUrl}/robots.txt`);
+  assert.equal(robotsResponse.status, 200);
+  const robots = await robotsResponse.text();
+  assert.match(robots, /Disallow: \/api\//);
+  assert.match(robots, /Sitemap: https:\/\/adekunle-dev\.onrender\.com\/sitemap\.xml/);
+
+  const sitemapResponse = await fetch(`${baseUrl}/sitemap.xml`);
+  assert.equal(sitemapResponse.status, 200);
+  assert.match(sitemapResponse.headers.get('content-type'), /application\/xml/);
+  const sitemap = await sitemapResponse.text();
+  const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+  assert.deepEqual(urls, [
+    'https://adekunle-dev.onrender.com/',
+    'https://adekunle-dev.onrender.com/about.html',
+    'https://adekunle-dev.onrender.com/projects.html',
+    'https://adekunle-dev.onrender.com/more.html',
+    'https://adekunle-dev.onrender.com/contact.html',
+  ]);
+});
+
+test('Google Search Console verification file is served from the site root', async () => {
+  const response = await fetch(`${baseUrl}/google671b0285eb845f18.html`);
+  assert.equal(response.status, 200);
+  assert.equal((await response.text()).trim(), 'google-site-verification: google671b0285eb845f18.html');
 });
 
 test('contact endpoint rejects invalid submissions', async () => {
